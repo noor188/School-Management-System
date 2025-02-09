@@ -30,7 +30,14 @@ long as they are not already registered.
 - [Junit platform runner](https://mvnrepository.com/artifact/org.junit.platform/junit-platform-runner)
 
 #### Requirement 1 - Models:
-I
+1. Created Model classes named Student.java and Course.java under Model package.
+- Each Model class has:
+     - no args constructor
+     - all args constructor
+     - required args constructor
+     - setters and getter
+     - toString (excluded collections to avoid infinite loops)
+     - override equals and hashcode methods
 #### Requirement 2 - Data Access Object  (dao) interfaces:
 
 #### Requirement 3 - Service layer:
@@ -40,7 +47,33 @@ I
 #### Requirement 5 - JUnit:
 
 #### Project Tree 
-![project_tree](images/project_tree.png)
+#### **Project Structure:**
+
+```
+/src/main/java/sba/sms/
+├── dao/
+│   ├── CourseI
+│   ├── StudentI
+│
+├── model/
+│   ├── Course.java
+│   ├── Student.java
+│
+├── service/
+│   ├── CourseService.java
+│   ├── StudentService.java
+|
+├── utils/
+│   ├── CommandLine.java
+│   ├── HibernateUtil.java
+|
+└── App.java (starter code for managing students)
+
+/src/test/java/sba/sma/
+├── service/
+│   ├── studentServiceTest.java 
+└── 
+```
 
 #### Workflow example
 ![workflow example](images/example.png)
