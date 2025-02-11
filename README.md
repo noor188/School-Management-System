@@ -39,16 +39,26 @@ https://github.com/noor188/School-Management-System
      - toString (excluded collections to avoid infinite loops)
      - override equals and hashcode methods
 #### Requirement 2 - Data Access Object  (dao) interfaces:
+
+-studentI
+-courseI
+
+#### Requirement 3 - Service layer:
 Created the following classes which implements the StudentI and CourseI interfaces, as well as overrides and implements all abstract service methods.
 
 - StudentService
 - CourseService
 
-#### Requirement 3 - Service layer:
-
 #### Requirement 4 - Utility classes:
 
+- HibernateUtil.java - hibernate configuration session factory helper
+- CommandLine.java - data initializer helper (dummy data dump).
+- Configuration file (hibernate.cfg.xml) can be found under src/main/resources/
+
 #### Requirement 5 - JUnit:
+
+- studentServiceTest
+- courseServiceTest
 
 #### Project Tree 
 #### **Project Structure:**
@@ -75,7 +85,8 @@ Created the following classes which implements the StudentI and CourseI interfac
 
 /src/test/java/sba/sma/
 ├── service/
-│   ├── studentServiceTest.java 
+│   ├── studentServiceTest.java
+│   ├── courseServiceTest.java 
 └── 
 ```
 
