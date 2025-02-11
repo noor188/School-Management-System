@@ -1,19 +1,18 @@
 package sba.sms.services;
 
-import lombok.extern.java.Log;
+import jakarta.persistence.PersistenceException;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.exception.ConstraintViolationException;
-import org.hibernate.query.NativeQuery;
-import org.hibernate.query.Query;
 import sba.sms.dao.StudentI;
 import sba.sms.models.Course;
 import sba.sms.models.Student;
 import sba.sms.utils.HibernateUtil;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -28,8 +27,8 @@ public class StudentService implements StudentI{
 
     private SessionFactory sessionFactory;
 
-    public StudentService(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+    public StudentService() {
+        this.sessionFactory = HibernateUtil.getSessionFactory();
     }
 
     // MODIFIE: This
@@ -48,8 +47,8 @@ public class StudentService implements StudentI{
             }catch(ConstraintViolationException e) {
                 System.out.println("Some constrains on the student fields were violated");
                 tx.rollback();
-            }catch(Exception e){
-                System.out.println("Studnet could not be created!");
+            }catch(PersistenceException e){
+                System.out.println("Email (ID) shouldn't be null!!");
                 tx.rollback();
             }
 
@@ -61,7 +60,15 @@ public class StudentService implements StudentI{
     @Override
     public Student getStudentByEmail(String email){
         try(Session session = sessionFactory.openSession()){
-            return session.get(Student.class, email);
+            Student student;
+            try {
+                student = session.get(Student.class, email);
+            }catch(IllegalArgumentException e){
+                System.out.println("Student could not be found!");
+                return null;
+            }
+
+            return student;
         }
     }
 
@@ -71,15 +78,24 @@ public class StudentService implements StudentI{
     public boolean validateStudent(String email, String password){
         try(Session session = sessionFactory.openSession()){
             Transaction tx = session.beginTransaction();
-            Student student = session.get(Student.class, email);
+            Student student;
             boolean valid;
 
+            try {
+                student = session.get(Student.class, email);
+            }catch(IllegalArgumentException e){
+                System.out.println("Student could not be found!");
+                tx.rollback();
+                return false;
+            }
             if (student != null){
                 valid = password.equals(student.getPassword());
+                System.out.println("matching passwords .....");
             }else{
                 valid = false;
             }
             tx.commit();
+            // “Wrong Credentials”
             return valid;
         }
     }
@@ -90,18 +106,28 @@ public class StudentService implements StudentI{
     public void registerStudentToCourse(String email, int courseId){
         try(Session session = sessionFactory.openSession()){
             Transaction tx = session.beginTransaction();
-            Student student = session.get(Student.class, email);
-            Course course = session.get(Course.class, courseId);
+            Student student;
+            Course course;
 
-            if (student != null && course != null){
+            try {
+                student = session.get(Student.class, email);
+                course = session.get(Course.class, courseId);
+
+                if (student == null && course == null){
+                    System.out.println(student == null ? "Student not found" : "Course not found" );
+                    tx.rollback();
+                }else if (student.getCourses().contains(course) || course.getStudents().contains(student)) {
+                    System.out.println("Student already registered!");
+                    tx.rollback();
+                } else {
+                    student.getCourses().add(course);
+                    course.getStudents().add(student);
+                    System.out.println("Added student to course succesfully!!!");
+                    tx.commit();
+                }
+            }catch(IllegalArgumentException e){
+                System.out.println("Student could not be found!");
                 tx.rollback();
-            }else if (student.getCourses().contains(course) || course.getStudents().contains(student)) {
-                System.out.println("Student already registered!");
-                tx.commit();
-            } else {
-                student.getCourses().add(course);
-                course.getStudents().add(student);
-                tx.commit();
             }
         }
     }
@@ -111,15 +137,25 @@ public class StudentService implements StudentI{
     @Override
     public List<Course> getStudentCourses(String email){
             try(Session session = sessionFactory.openSession()){
-                Student student = session.get(Student.class, email);
+                Transaction tx = session.beginTransaction();
+                Student student;
 
-                if (student != null){
+                try {
+                    student = session.get(Student.class, email);
+                }catch(IllegalArgumentException e){
+                    System.out.println("Student could not be found!");
+                    tx.rollback();
+                    return new ArrayList<>();
+                }
+
+                if (student == null){
                     System.out.println("Student does not exist in the database!");
-                    return null;
+                    return new ArrayList<>();
                 }
 
                 Set<Course> courses = student.getCourses();
                 List<Course> courseList = new ArrayList<>(courses);
+                tx.commit();
                 return courseList;
             }
     }

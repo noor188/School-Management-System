@@ -16,6 +16,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
  *  <b style="color:red">WARNING! </b>
  *  <b>DO NOT MODIFY THIS CODE</b>
  */
+
 public class HibernateUtil {
     private HibernateUtil() {
         // Utility classes should not have public constructors
@@ -25,8 +26,12 @@ public class HibernateUtil {
      * @Getter builds a standard getter method for the object
      * sessionFactory.
      */
-    @Getter
+
     private static SessionFactory sessionFactory = buildSessionFactory();
+
+    public static SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
 
     /**
      * Method builds a session factory from the 'hibernate.cfg.xml' file
