@@ -39,6 +39,10 @@ long as they are not already registered.
      - toString (excluded collections to avoid infinite loops)
      - override equals and hashcode methods
 #### Requirement 2 - Data Access Object  (dao) interfaces:
+Created the following classes which implements the StudentI and CourseI interfaces, as well as overrides and implements all abstract service methods.
+
+- StudentService
+- CourseService
 
 #### Requirement 3 - Service layer:
 
