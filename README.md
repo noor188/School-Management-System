@@ -60,7 +60,6 @@ Created the following classes which implements the StudentI and CourseI interfac
 - studentServiceTest
 - courseServiceTest
 
-#### Project Tree 
 #### **Project Structure:**
 
 ```
