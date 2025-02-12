@@ -17,22 +17,25 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "student")
-//@NoArgsConstructor
-//@AllArgsConstructor
-//@RequiredArgsConstructor
-//@Getter
-//@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@RequiredArgsConstructor
+@Getter
+@Setter
 @ToString(exclude = "courses")
 public class Student {
 
     @Id
     @Column(name = "email", length = 50)
+    @NonNull
     private String email;
 
     @Column(name = "name", length = 50, nullable = false)
+    @NonNull
     private String name;
 
     @Column(name = "password", length = 50, nullable = false)
+    @NonNull
     private String password;
 
     @ManyToMany(cascade = { CascadeType.DETACH, CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER)
@@ -42,52 +45,6 @@ public class Student {
             inverseJoinColumns = @JoinColumn(name = "courses_id ")
     )
     private Set<Course> courses = new HashSet<>();
-
-    public Student(){}
-
-    public Student (String email, String name, String password){
-        this.email = email;
-        this.name = name;
-        this.password = password;
-    }
-
-    public Student(String email,String name, String password, Set<Course> courses) {
-        this.name = name;
-        this.password = password;
-        this.courses = courses;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Set<Course> getCourses() {
-        return courses;
-    }
-
-    public void setCourses(Set<Course> courses) {
-        this.courses = courses;
-    }
 
     @Override
     public boolean equals(Object o){
