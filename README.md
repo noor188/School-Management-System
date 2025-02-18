@@ -40,8 +40,8 @@ long as they are not already registered.
      - override equals and hashcode methods
 #### Requirement 2 - Data Access Object  (dao) interfaces:
 
--studentI
--courseI
+- studentI
+- courseI
 
 #### Requirement 3 - Service layer:
 Created the following classes which implements the StudentI and CourseI interfaces, as well as overrides and implements all abstract service methods.
