@@ -16,7 +16,7 @@ Otherwise, a message is displayed stating: “Wrong Credentials”.
 Valid students are able to see the courses they are registered for.
 Valid students are able to register for any course in the system as
 long as they are not already registered.
-https://github.com/noor188/School-Management-System
+
 ### Maven Project Requirements:
 
 - [Amazon Corretto 17 JDK](https://docs.aws.amazon.com/corretto/latest/corretto-17-ug/downloads-list.html) 
